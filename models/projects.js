@@ -29,7 +29,7 @@ const projectSchema = mongoose.Schema({
   },
   projectUrl: {
     type: String,
-    required: true,
+    required: false,
     validate: {
       validator: function (v) {
         return /^https?:\/\/.+/.test(v);
@@ -39,7 +39,7 @@ const projectSchema = mongoose.Schema({
   },
   githubUrl: {
     type: String,
-    required: true,
+    required: false,
     validate: {
       validator: function (v) {
         return /^https?:\/\/(www\.)?github\.com\/.+/.test(v);
