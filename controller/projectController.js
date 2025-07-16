@@ -27,6 +27,25 @@ export function getProject(req, res) {
   });
 }
 
+export function getProjectById(req, res) {
+  const projectId = req.params.projectId;
+
+  Project.findOne({ projectId })
+    .then((project) => {
+      if (!project) {
+        return res.status(404).json({
+          message: "Project not found",
+        });
+      }
+      res.json({ project });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: error.message || "Failed to retrieve project",
+      });
+    });
+}
+
 export function deleteProject(req, res) {
   const projectId = req.params.projectId;
 
