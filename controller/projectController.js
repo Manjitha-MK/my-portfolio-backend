@@ -1,23 +1,51 @@
 import Project from "../models/projects.js";
 
 export function createProject(req, res) {
-  const newProjectData = req.body;
 
-  const project = new Project(newProjectData);
+  const {
+    projectId,
+    projectName,
+    description,
+    projectSummary,
+    category,
+    technologies,
+    projectUrl,
+    githubUrl,
+  } = req.body;
+
+  // Get uploaded image paths from Multer
+  const imagePaths = req.files?.map((file) => `/uploads/${file.filename}`) || [];
+
+  const project = new Project({
+    projectId,
+    projectName,
+    description,
+    projectSummary,
+    category,
+    technologies: Array.isArray(technologies)
+      ? technologies
+      : technologies.split(","), // to support both string or array
+    projectUrl,
+    githubUrl,
+    Images: imagePaths,
+  });
+  console.log("Create project input:", req.body, req.files);
 
   project
     .save()
     .then(() => {
-      res.json({
+      res.status(201).json({
         message: "Project created",
+        project,
       });
     })
     .catch((error) => {
-      res.status(403).json({
-        message: error,
+      res.status(400).json({
+        message: error.message,
       });
     });
 }
+
 
 export function getProject(req, res) {
   Project.find({}).then((projects) => {
@@ -63,7 +91,7 @@ export function deleteProject(req, res) {
 }
 
 export function updateProject(req, res) {
-  const productId = req.params.projectId;
+    const productId = req.params.projectId;
   const newProjectData = req.body;
 
   Project.updateOne({ projectId: productId }, newProjectData)
@@ -77,4 +105,5 @@ export function updateProject(req, res) {
         message: error,
       });
     });
+  }
 }
