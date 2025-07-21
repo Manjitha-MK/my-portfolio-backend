@@ -16,6 +16,7 @@ connection.once("open", ()=>{
     console.log("Database Connected");
 });
 
+app.use("/uploads", express.static("uploads"));
 app.use("/api/projects", projectRouter);
 
 app.listen(5000, () => {
