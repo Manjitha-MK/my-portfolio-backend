@@ -19,6 +19,10 @@ const projectSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  projectSummary: {
+    type: String,
+    required: true,
+  },
   category: {
     type: String,
     required: true,
@@ -32,7 +36,7 @@ const projectSchema = mongoose.Schema({
     required: false,
     validate: {
       validator: function (v) {
-        return /^https?:\/\/.+/.test(v);
+        return !v || /^https?:\/\/.+/.test(v);
       },
       message: (props) => `${props.value} is not a valid URL`,
     },
@@ -42,7 +46,7 @@ const projectSchema = mongoose.Schema({
     required: false,
     validate: {
       validator: function (v) {
-        return /^https?:\/\/(www\.)?github\.com\/.+/.test(v);
+        return !v || /^https?:\/\/(www\.)?github\.com\/.+/.test(v);
       },
       message: (props) => `${props.value} is not a valid GitHub URL`,
     },
