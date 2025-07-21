@@ -90,20 +90,44 @@ export function deleteProject(req, res) {
     });
 }
 
-export function updateProject(req, res) {
+export async function updateProject(req, res) {
+  try {
     const productId = req.params.projectId;
-  const newProjectData = req.body;
 
-  Project.updateOne({ projectId: productId }, newProjectData)
-    .then(() => {
-      res.json({
-        message: "Project Upadated",
-      });
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: error,
-      });
-    });
+    let existingImages = [];
+    try {
+      existingImages = JSON.parse(req.body.existingImages || "[]");
+    } catch (err) {
+      console.error("Invalid JSON in existingImages:", err.message);
+    }
+
+    const newImages = (req.files?.newImages || []).map((file) => file.filename);
+    const allImages = [...existingImages, ...newImages];
+
+    const updatedData = {
+      projectId: req.body.projectId,
+      projectName: req.body.projectName,
+      description: req.body.description,
+      projectSummary: req.body.projectSummary,
+      category: req.body.category,
+      projectUrl: req.body.projectUrl,
+      githubUrl: req.body.githubUrl,
+      technologies: req.body.technologies,
+      Images: allImages,
+    };
+
+    console.log("Updating project:", productId);
+    console.log("Data:", updatedData);
+
+    const result = await Project.updateOne({ projectId: productId }, updatedData);
+
+    if (result.modifiedCount === 0) {
+      return res.status(200).json({ message: "No changes were made" });
+    }
+
+    res.json({ message: "Project Updated" });
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 }
