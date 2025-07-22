@@ -11,6 +11,7 @@ export function createProject(req, res) {
     technologies,
     projectUrl,
     githubUrl,
+    isFeatured,
   } = req.body;
 
   // Get uploaded image paths from Multer
@@ -28,6 +29,7 @@ export function createProject(req, res) {
     projectUrl,
     githubUrl,
     Images: imagePaths,
+    isFeatured: isFeatured || false,
   });
   console.log("Create project input:", req.body, req.files);
 
