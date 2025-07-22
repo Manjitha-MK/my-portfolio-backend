@@ -1,7 +1,6 @@
 import Project from "../models/projects.js";
 
 export function createProject(req, res) {
-
   const {
     projectId,
     projectName,
@@ -15,7 +14,8 @@ export function createProject(req, res) {
   } = req.body;
 
   // Get uploaded image paths from Multer
-  const imagePaths = req.files?.map((file) => `/uploads/${file.filename}`) || [];
+  const imagePaths =
+    req.files?.map((file) => `/uploads/${file.filename}`) || [];
 
   const project = new Project({
     projectId,
@@ -48,7 +48,6 @@ export function createProject(req, res) {
     });
 }
 
-
 export function getProject(req, res) {
   Project.find({}).then((projects) => {
     res.json({
@@ -73,6 +72,17 @@ export function getProjectById(req, res) {
       res.status(500).json({
         message: error.message || "Failed to retrieve project",
       });
+    });
+}
+
+export function getFeaturedProjects(req, res) {
+  Project.find({ isFeatured: true })
+    .limit(6)
+    .then((projects) => {
+      res.json({ projects });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
     });
 }
 
@@ -121,7 +131,10 @@ export async function updateProject(req, res) {
     console.log("Updating project:", productId);
     console.log("Data:", updatedData);
 
-    const result = await Project.updateOne({ projectId: productId }, updatedData);
+    const result = await Project.updateOne(
+      { projectId: productId },
+      updatedData
+    );
 
     if (result.modifiedCount === 0) {
       return res.status(200).json({ message: "No changes were made" });
