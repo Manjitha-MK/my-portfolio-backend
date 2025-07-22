@@ -2,6 +2,7 @@ import express from "express";
 import {
   createProject,
   deleteProject,
+  getFeaturedProjects,
   getProject,
   getProjectById,
   updateProject,
@@ -12,6 +13,7 @@ const projectRouter = express.Router();
 // projectRouter.post("/", createProject);
 projectRouter.get("/", getProject);
 projectRouter.get("/:projectId", getProjectById);
+projectRouter.get("/featured", getFeaturedProjects);
 projectRouter.put(
   "/:projectId",
   upload.fields([{ name: "newImages", maxCount: 5 }]),
