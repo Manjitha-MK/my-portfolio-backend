@@ -51,7 +51,11 @@ const projectSchema = mongoose.Schema({
       message: (props) => `${props.value} is not a valid GitHub URL`,
     },
   },
-});
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
+}, {timestamps: true});
 
 const Project = mongoose.model("projects", projectSchema);
 
