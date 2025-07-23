@@ -11,9 +11,10 @@ import upload from "../middleware/upload.js";
 const projectRouter = express.Router();
 
 // projectRouter.post("/", createProject);
+projectRouter.get("/featured", getFeaturedProjects);
 projectRouter.get("/", getProject);
 projectRouter.get("/:projectId", getProjectById);
-projectRouter.get("/featured", getFeaturedProjects);
+
 projectRouter.put(
   "/:projectId",
   upload.fields([{ name: "newImages", maxCount: 5 }]),
