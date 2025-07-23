@@ -29,7 +29,7 @@ export function createProject(req, res) {
     projectUrl,
     githubUrl,
     Images: imagePaths,
-    isFeatured: isFeatured || false,
+    isFeatured: isFeatured === "true",
   });
   console.log("Create project input:", req.body, req.files);
 
@@ -126,6 +126,7 @@ export async function updateProject(req, res) {
       githubUrl: req.body.githubUrl,
       technologies: req.body.technologies,
       Images: allImages,
+      isFeatured: req.body.isFeatured === "true",
     };
 
     console.log("Updating project:", productId);
